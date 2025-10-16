@@ -2,8 +2,7 @@ from django.db import models
 from userapp.models import User
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
-from django.core.validators import FileExtensionValidator
+from django.core.validators import RegexValidator,FileExtensionValidator
 from django.utils import timezone
 import string, random
 # Create your models here.
@@ -31,6 +30,10 @@ class Conference(models.Model):
 )
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"la conference a comme nom : {self.name} et comme theme : {self.theme}"
+
     def clean(self):
         if self.date_debut and self.date_fin and self.date_debut > self.date_fin:
              raise ValidationError({'date_fin': "La date de fin doit etre posterieure a la date de debut."})
@@ -64,7 +67,7 @@ class Submission(models.Model):
     update_at = models.DateTimeField(auto_now=True)
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE, related_name='submissions')
     user =models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
-    def validate_keywords_count(self):
+    """def validate_keywords_count(self):
         if not self.keywords:
             return
 
@@ -74,10 +77,24 @@ class Submission(models.Model):
         if len(mots_cles) > 10:
             raise ValidationError({
                 'keywords': f"Le nombre de mots-clés ne doit pas dépasser 10 (actuellement {len(mots_cles)})."
-            })
+            })"""
+    def validate_keywords_count(self):
+            keywords_list=[]
+            if self.keywords:
+                for k in self.keywords.split(','):
+                    k=k.strip()
+                    if k:
+                        keywords_list.append(k)
+            if len(keywords_list) > 10:
+                raise ValidationError({
+                    'keywords': f"Le nombre de mots-clés ne doit pas dépasser 10 (actuellement {len(keywords_list)})."
+                })
+        
+
     def clean(self):
         self.validate_keywords_count()
 
+        """
         # ---- RÈGLE 1 : soumission uniquement pour une conférence à venir ----
         # (on accepte seulement si la conférence commence après aujourd'hui)
         if self.conference_id:
@@ -104,13 +121,18 @@ class Submission(models.Model):
 
             if qs.count() >= 3:
                 raise ValidationError( "Limite atteinte : au maximum 3 soumissions par jour et par participant.")
-    
+        """
+        if self.submission_date and self.conference_id:
+            if self.conference.date_debut < timezone.localdate() and self.submission_date > self.conference.date_fin:
+                raise ValidationError("La soumission est autorisée uniquement pour des conférences à venir.")
+        
     def generate_submission_id(self):
         """Génère un identifiant unique au format SUB-ABCDEFGH"""
         prefix = "SUB-"
         letters = string.ascii_uppercase
         random_part = ''.join(random.choices(letters, k=8))
         return prefix + random_part
+    
     def save(self, *args, **kwargs):
         if not self.submission_id:
             newid = self.generate_submission_id()
