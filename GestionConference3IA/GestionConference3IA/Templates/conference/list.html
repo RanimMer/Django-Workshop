@@ -1,5 +1,8 @@
-<h1>La liste des conferences</h1>
+{% extends 'base.html' %}
+{% block content %}
+    <h1>La liste des conferences</h1>
 <table border="1">
+    <a href="{% url 'conference_add' %}">Add</a>
     <tr>
         <td>Title</td>
         <td>Theme</td>
@@ -11,7 +14,11 @@
         <td>{{c.name}}</td>
         <td>{{c.theme}}</td>
         <td>{{c.date_debut}} - {{c.date_fin}}</td>
-        <td><a href="{% url 'conference_detail' c.pk %}">Details</a></td>
+        <td><a href="{% url 'conference_detail' c.pk %}">Details</a>
+        <a href="{% url 'conference_update' c.pk %}">Update</a>
+        <a href="{% url 'conference_delete' c.pk %}">Delete</a></td>
+        
     </tr>
     {% endfor %}
 </table>
+{% endblock %}

@@ -7,4 +7,6 @@ urlpatterns = [
     path("list/", ConferenceList.as_view(), name="list_conferences"),
     path("<int:pk>/", ConferenceDetail.as_view(), name="conference_detail"),
     path("add/", ConferenceCreate.as_view(), name="conference_add"),
+    path("edit/<int:pk>/", ConferenceUpdate.as_view(), name="conference_update"),
+    path("delete/<int:pk>/", ConferenceDelete.as_view(), name="conference_delete"),
 ]

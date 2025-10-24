@@ -1,4 +1,9 @@
-<h1>Formulaire d'Ajout</h1>
+
+{% if view.object.pk %}
+    <h1>Formulaire de Modification {{object.name}}</h1>
+{% else %}
+    <h1>Formulaire d'Ajout</h1>
+{% endif %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
