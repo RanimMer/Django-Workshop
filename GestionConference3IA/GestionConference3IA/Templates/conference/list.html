@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <h1>La liste des conferences</h1>
 <table border="1">
+    {% if user.is_authenticated and user.role == "committee" %}
     <a href="{% url 'conference_add' %}">Add</a>
+    {% endif %}
     <tr>
         <td>Title</td>
         <td>Theme</td>
@@ -15,9 +18,10 @@
         <td>{{c.theme}}</td>
         <td>{{c.date_debut}} - {{c.date_fin}}</td>
         <td><a href="{% url 'conference_detail' c.pk %}">Details</a>
+        {% if user.is_authenticated and user.role == "committee" %}
         <a href="{% url 'conference_update' c.pk %}">Update</a>
         <a href="{% url 'conference_delete' c.pk %}">Delete</a></td>
-        
+        {% endif %}
     </tr>
     {% endfor %}
 </table>

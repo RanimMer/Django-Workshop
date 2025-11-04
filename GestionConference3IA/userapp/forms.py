@@ -14,3 +14,11 @@ class UserRegisterForm(UserCreationForm):
             'password2': forms.PasswordInput(),
      
         }
+"""
+    def save(self, commit=True):
+        user=super().save(commit=False)
+        user.role="participant"
+        if commit:
+            user.save()
+        return user
+"""

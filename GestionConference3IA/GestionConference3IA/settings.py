@@ -54,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'GestionConference3IA.urls'
 
+import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -68,6 +69,8 @@ TEMPLATES = [
         },
     },
 ]
+STATIC_URL = '/static/'  
+STATICFILES_DIRS = [os.path.join(BASE_DIR,  'GestionConference3IA', 'static')]
 
 WSGI_APPLICATION = 'GestionConference3IA.wsgi.application'
 
@@ -125,3 +128,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'userapp.User'
+
+LOGIN_REDIRECT_URL = 'list_conferences'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
