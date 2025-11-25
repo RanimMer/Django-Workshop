@@ -15,4 +15,6 @@ urlpatterns =[
     path('submissions/<str:pk>/', DetailSubmissionView.as_view(), name='detail_submission'),
     path('submissions/update/<str:pk>/', UpdateSubmission.as_view(), name='update_submission'),
 
+
+   
     ]

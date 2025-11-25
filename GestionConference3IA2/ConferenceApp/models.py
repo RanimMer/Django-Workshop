@@ -60,3 +60,7 @@ class Submission(models.Model):
                 newid=generate_submission_id()
             self.submission_id=newid
         super().save(*args,**kwargs)
+
+    
+
+    
